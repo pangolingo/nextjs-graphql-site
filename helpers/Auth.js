@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { parseCookies, setCookie, destroyCookie } from 'nookies'
 
 export const login = async (email, password) => {
   const data = new URLSearchParams();
@@ -9,7 +10,7 @@ export const login = async (email, password) => {
       responseType: 'text'
     });
     if(response.data && response.data.jwt){
-      saveToken(response.data.jwt);
+      saveToken(null, response.data.jwt);
     } else {
       throw new Error('JWT not received after login success')
     }
@@ -36,12 +37,14 @@ export const login = async (email, password) => {
     }
   }
 }
-export const saveToken = (jwt) => {
+
+export const saveToken = (ctx, jwt) => {
   // return window.localStorage.setItem('jwt', jwt);
+  return setCookie(null, 'token', jwt)
 }
-export const loadToken = () => {
+export const loadToken = (ctx) => {
   // return window.localStorage.getItem('jwt');
-  return null
+  return parseCookies(ctx)['token'] || null;
 }
 
 export default {

@@ -36,7 +36,17 @@ class Team extends React.Component {
           {({ loading, error, data }) => {
           if (error) {
             console.log(error)
-            return <ErrorMessage message='Error loading teams' />
+            if(error.graphQLErrors.some((err => err.path[0] === 'team' && err.extensions.code === 'UNAUTHENTICATED'))){
+              return (
+                <div>
+                  <ErrorMessage message='You must be logged in to view this team.' />
+                  <Link href="/login">
+                    <a>Log In</a>
+                  </Link>
+                </div>
+              )
+            }
+            return <ErrorMessage message={error.message} />
           }
           if (loading) return <div>Loading</div>
 
