@@ -47,6 +47,10 @@ export const loadToken = (ctx) => {
   return parseCookies(ctx)['token'] || null;
 }
 
+export const clearToken = (ctx) => {
+  return destroyCookie(null, 'token')
+}
+
 export default {
   login,
   saveToken,

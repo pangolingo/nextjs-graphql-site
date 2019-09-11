@@ -2,6 +2,8 @@ import React from 'react'
 import App, { Container } from 'next/app'
 import withApolloClient from '../lib/with-apollo-client'
 import { ApolloProvider } from 'react-apollo'
+import Header from '../components/Header';
+import { clearToken } from '../helpers/Auth';
 
 class CustomApp extends App {
   // static async getInitialProps({ Component, ctx }) {
@@ -14,12 +16,18 @@ class CustomApp extends App {
   //   return { pageProps }
   // }
 
+  logout = () => {
+    clearToken();
+    this.props.apolloClient.resetStore();
+  }
+
   render () {
     const { Component, pageProps, apolloClient } = this.props
 
     return (
       <Container>
         <ApolloProvider client={apolloClient}>
+          <Header logout={this.logout} />
           <Component {...pageProps} />
         </ApolloProvider>
       </Container>

@@ -1,12 +1,13 @@
 
-import { Query } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Link from 'next/link';
 
 import UserCard from '../components/UserCard';
 import ErrorMessage from "../components/ErrorMessage";
+import UserComments from '../components/UserComments';
 
-export const userQuery = gql`
+export const USER_QUERY = gql`
   query User($id: ID!) {
     user(id: $id) {
       id,
@@ -17,6 +18,7 @@ export const userQuery = gql`
     }
   }
 `;
+
 
 class User extends React.Component {
   static async getInitialProps({query}) {
@@ -31,8 +33,8 @@ class User extends React.Component {
           <a>Home</a>
         </Link>
         <h1>User</h1>
-        <Query query={userQuery} variables={{id: userId}}>
-          {({ loading, error, data }) => {
+        <Query query={USER_QUERY} variables={{id: userId}} errorPolicy="all">
+          {({ loading, error, data, fetchMore }) => {
           if (error) {
             console.log(error)
             return <ErrorMessage message='Error loading user' />
@@ -40,9 +42,13 @@ class User extends React.Component {
           if (loading) return <div>Loading</div>
 
           if(!data.user){
-            console.log('no teuseram data');
+            console.log('no user data');
           }
           const user = data.user;
+
+          if(!user){
+            return 'Nothing';
+          }
 
           return (
             <div>
@@ -52,6 +58,7 @@ class User extends React.Component {
                 <li>City: {user.city}</li>
                 <li>State: {user.state}</li>
               </ul>
+              <UserComments user={user} />
             </div>
           )
           }}
