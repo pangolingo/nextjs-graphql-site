@@ -6,7 +6,7 @@
   "dependencies": {
     "apollo-boost": "0.3.1",
     "apollo-link-context": "1.0.15",
-    "axios": "0.18.0",
+    "axios": "0.21.1",
     "express": "4.16.4",
     "graphql": "14.1.1",
     "isomorphic-unfetch": "3.0.0",
